@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog detectionProgressDialog;
 
     private FaceServiceClient faceServiceClient =
-            new FaceServiceClient("your subscription key");
+            new FaceServiceClient("56654b6fd41d48ab958a83be18712639");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ImageView imageView = (ImageView) findViewById(R.id.imageView1);
                 imageView.setImageBitmap(bitmap);
+
+                detectAndFrame(bitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -100,5 +103,80 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Detect faces by uploading face images
+// Frame faces after detection
+    private void detectAndFrame(final Bitmap imageBitmap)
+    {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        AsyncTask<InputStream, String, Face[]> detectTask =
+                new AsyncTask<InputStream, String, Face[]>() {
+                    @Override
+                    protected Face[] doInBackground(InputStream... params) {
+                        try {
+                            publishProgress("Detecting...");
+                            Face[] result = faceServiceClient.detect(
+                                    params[0], false, false, false, false);
+                            if (result == null)
+                            {
+                                publishProgress("Detection Finished. Nothing detected");
+                                return null;
+                            }
+                            publishProgress(
+                                    String.format("Detection Finished. %d face(s) detected",
+                                            result.length));
+                            return result;
+                        } catch (Exception e) {
+                            publishProgress("Detection failed");
+                            return null;
+                        }
+                    }
+                    @Override
+                    protected void onPreExecute() {
+
+                        detectionProgressDialog.show();
+                    }
+                    @Override
+                    protected void onProgressUpdate(String... progress) {
+
+                        detectionProgressDialog.setMessage(progress[0]);
+                    }
+                    @Override
+                    protected void onPostExecute(Face[] result) {
+
+                        detectionProgressDialog.dismiss();
+                        if (result == null) return;
+                        ImageView imageView = (ImageView)findViewById(R.id.imageView1);
+                        imageView.setImageBitmap(drawFaceRectanglesOnBitmap(imageBitmap, result));
+                        imageBitmap.recycle();
+                    }
+                };
+        detectTask.execute(inputStream);
+    }
+
+    private static Bitmap drawFaceRectanglesOnBitmap(Bitmap originalBitmap, Face[] faces) {
+        Bitmap bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.RED);
+        int stokeWidth = 2;
+        paint.setStrokeWidth(stokeWidth);
+        if (faces != null) {
+            for (Face face : faces) {
+                FaceRectangle faceRectangle = face.faceRectangle;
+                canvas.drawRect(
+                        faceRectangle.left,
+                        faceRectangle.top,
+                        faceRectangle.left + faceRectangle.width,
+                        faceRectangle.top + faceRectangle.height,
+                        paint);
+            }
+        }
+        return bitmap;
     }
 }
