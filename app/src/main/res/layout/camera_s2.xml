@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/accent_material_dark">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You are on the camera screen, my friend"
+            android:textColor="#000"
+            android:textSize="15dp"
+
+            android:layout_above="@+id/dataButton"
+            android:layout_alignLeft="@+id/dataButton"
+            android:layout_alignStart="@+id/dataButton"
+            android:layout_marginBottom="73dp" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I took the picture, happy now??"
+            android:id="@+id/dataButton"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+
+
+    </RelativeLayout>
+
