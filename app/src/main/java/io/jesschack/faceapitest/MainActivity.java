@@ -24,7 +24,7 @@ import com.microsoft.projectoxford.face.contract.*;
 
 public class MainActivity extends AppCompatActivity {
 
-
+//Microsoft API Key and Set-Up
     private final int PICK_IMAGE = 1;
     private ProgressDialog detectionProgressDialog;
 
