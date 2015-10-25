@@ -9,20 +9,20 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
-    <TextView android:text="Hello World!" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView android:text="Click the Button!" android:layout_width="wrap_content"
+        android:textAllCaps="true"
+        android:textSize="50dp"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView1" />
+        android:layout_height="match_parent"
+        android:id="@+id/imageView1"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="107dp" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Browse"
-        android:id="@+id/button1"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false" />
 </RelativeLayout>

@@ -36,19 +36,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Microsoft API
-        Button button1 = (Button)findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gallIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                gallIntent.setType("image/*");
-                startActivityForResult(Intent.createChooser(gallIntent, "Select Picture"), PICK_IMAGE);
-            }
-        });
-
-        detectionProgressDialog = new ProgressDialog(this);
-
         //Toolbar and Floating Button
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,10 +44,19 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                //Microsoft API
+                Intent gallIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                gallIntent.setType("image/*");
+                startActivityForResult(Intent.createChooser(gallIntent, "Select Picture"), PICK_IMAGE);
             }
         });
+
+        detectionProgressDialog = new ProgressDialog(this);
+
+
+
+
     }
 
     @Override
